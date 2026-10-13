@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fly, Bat, Worm
+Comment=One thing, as sight, hearing and touch each have it
+Exec=fly-bat-worm
+TryExec=fly-bat-worm
+X-Screensaver-Standalone=true
+X-Screensaver-Snapshot=fly-bat-worm --snapshot %o --size %wx%h --time 62

@@ -1,0 +1,17 @@
+Package: fly-bat-worm
+Version: @VERSION@
+Section: games
+Priority: optional
+Architecture: @ARCH@
+Depends: libc6 (>= 2.38), libsdl2-2.0-0 (>= 2.0.18), swayidle
+Installed-Size: @SIZE@
+Maintainer: Motti Schleider <motti.schleider@gmail.com>
+Description: Fly, Bat, Worm, a screensaver from "Anathem"
+ The Fly, the Bat and the Worm, from Neal Stephenson's novel Anathem: three
+ creatures with one sense each come upon the same thing, a clockwork trap in a
+ cave. The Fly sees it as a mosaic, the Bat hears its own cries come back from
+ its edges, and the Worm knows only the surface it has crawled over. What all
+ three share is its shape.
+ .
+ On Wayland desktops it starts by itself after five minutes idle.
+ fly-bat-worm-screensaver changes the delay or turns it off.

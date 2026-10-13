@@ -7,7 +7,7 @@ under assets/art.
 scene.jpeg is the square painting of the trap in the cave. Three more pictures are
 made from it, so that they line up with it exactly: its outlines as white lines on
 black, which is what the Bat's cries show up; a grey relief of its surfaces, which
-is what the Worm feels; and a dark blurred copy to go behind everything.
+is what the Worm feels; The dark behind everything is made here too.
 creatures.jpeg is the Fly, the Bat and the Worm in a row on flat magenta. Needs
 ImageMagick and numpy.
 """
@@ -72,8 +72,9 @@ def main():
                     "-morphology", "Dilate", "Disk:1.6", "-blur", "0x0.7", "-quality", "92", f"{OUT}/edges.jpg"], check=True)
     subprocess.run(["magick", src, "-resize", "768x768!", "-colorspace", "Gray", "-blur", "0x1", "-shade", "135x30", "-auto-level",
                     "-fill", "#c8a27a", "-tint", "100", "-quality", "90", f"{OUT}/relief.jpg"], check=True)
-    subprocess.run(["magick", src, "-resize", "960x540^", "-gravity", "center", "-extent", "960x540", "-blur", "0x14",
-                    "-brightness-contrast", "-50x-30", "-attenuate", "0.25", "+noise", "Gaussian", "-quality", "92", f"{OUT}/bg.jpg"], check=True)
+    # behind everything: the dark of the cave, lighter in the middle
+    subprocess.run(["magick", "-size", "960x540", "radial-gradient:#33231a-#0b0806", "-attenuate", "0.12", "+noise", "Gaussian",
+                    "-quality", "95", f"{OUT}/bg.jpg"], check=True)
     print("scene, edges, relief, bg")
     if os.path.exists(f"{SRC}/creatures.jpeg"):
         got = [trim(p) for p in pieces(key(load(f"{SRC}/creatures.jpeg")), 1)]

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fly, Bat, Worm
+Comment=One thing, as sight, hearing and touch each have it
+Exec=fly-bat-worm --window
+Icon=fly-bat-worm
+Categories=Game;LogicGame;Education;Math;
+Keywords=Anathem;senses;philosophy;screensaver;

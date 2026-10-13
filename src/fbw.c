@@ -338,7 +338,7 @@ static void fly_view(double t)
  * edges it strikes send it back. What has been heard lingers faintly. */
 static void bat_view(double t, double bx, double by)
 {
-    whole(SP_EDGES, 120, 190, 230, 0.1 * ramp(t, 2, 8));
+    whole(SP_EDGES, 120, 190, 230, 0.13 * ramp(t, 2, 8));
     for (int k = 0; k < 4; k++) {
         double age = fmod(t + k * 0.9, 3.6), r = age * PS * 0.42, band = PS * 0.16, a = (1 - age / 3.6);
         if (t < k * 0.9) continue;
@@ -355,18 +355,19 @@ static void bat_view(double t, double bx, double by)
             line(bx + cos(i * M_PI / 32) * r, by + sin(i * M_PI / 32) * r, bx + cos((i + 1) * M_PI / 32) * r, by + sin((i + 1) * M_PI / 32) * r, unit * 0.1, col(THREAD, 0.3 * a));
     }
     /* and the trap ticks */
-    double tick = fmod(t, 1.0), tx = PX + PS * 0.5, ty = PY + PS * 0.5;
+    double tick = fmod(t, 1.0), tx = PX + PS * 0.8, ty = PY + PS * 0.52; /* where the clockwork is */
     for (int i = 0; i < 40; i++)
         line(tx + cos(i * M_PI / 20) * tick * PS * 0.16, ty + sin(i * M_PI / 20) * tick * PS * 0.16, tx + cos((i + 1) * M_PI / 20) * tick * PS * 0.16,
              ty + sin((i + 1) * M_PI / 20) * tick * PS * 0.16, unit * 0.16, col(GOLD, 0.7 * (1 - tick)));
     flush(ren);
 }
 
-/* The Worm's road: along the floor, up over the trap and down again. */
+/* The Worm's road: along the floor, up over the dome of the cage, down past the
+ * clockwork and off along the floor again. */
 static void worm_at(double s, double *x, double *y)
 {
-    static const double P[7][2] = {{0.04, 0.8}, {0.28, 0.8}, {0.36, 0.6}, {0.5, 0.4}, {0.64, 0.6}, {0.72, 0.8}, {0.96, 0.8}};
-    double f = fmin(fmax(s, 0), 0.9999) * 6;
+    static const double P[9][2] = {{0.02, 0.85}, {0.18, 0.84}, {0.22, 0.52}, {0.42, 0.24}, {0.62, 0.17}, {0.8, 0.38}, {0.9, 0.6}, {0.91, 0.83}, {0.99, 0.85}};
+    double f = fmin(fmax(s, 0), 0.9999) * 8;
     int i = (int)f;
     f -= i;
     *x = PX + PS * (P[i][0] + (P[i + 1][0] - P[i][0]) * f); *y = PY + PS * (P[i][1] + (P[i + 1][1] - P[i][1]) * f);
@@ -374,15 +375,15 @@ static void worm_at(double s, double *x, double *y)
 /* What the Worm feels: only the surface it has been over. */
 static void worm_view(double t, double *hx, double *hy, double *hdeg)
 {
-    double s = ramp(t, 0.5, 14), rho = PS * 0.085;
+    double s = ramp(t, 0.5, 14.5), rho = PS * 0.095;
     for (int k = 0; k <= 70; k++) {
         double q = k / 70.0, x, y;
         if (q > s) break;
         worm_at(q, &x, &y);
         SDL_Vertex v[18];
         int idx[48];
-        v[0] = pv(x, y, 255, 255, 255, 0.5);
-        for (int i = 0; i <= 16; i++) v[1 + i] = pv(x + cos(i * M_PI / 8) * rho, y + sin(i * M_PI / 8) * rho, 255, 255, 255, 0);
+        v[0] = pv(x, y, 255, 236, 205, 0.55);
+        for (int i = 0; i <= 16; i++) v[1 + i] = pv(x + cos(i * M_PI / 8) * rho, y + sin(i * M_PI / 8) * rho, 255, 236, 205, 0);
         for (int i = 0; i < 16; i++) { idx[i * 3] = 0; idx[i * 3 + 1] = 1 + i; idx[i * 3 + 2] = 2 + i; }
         geom(SP_RELIEF, v, 18, idx, 48);
     }
@@ -451,7 +452,7 @@ static void draw_scene(SDL_Renderer *r, int w, int h)
         clip(1);
         if (t > 0) {
             fly_view(t);
-            creature(SP_FLY, PX + PS * 0.2 + sin(anim_t * 2.1) * PS * 0.03, PY + PS * 0.17 + sin(anim_t * 3.3) * PS * 0.02, PS * 0.2, sin(anim_t * 5) * 4, 0);
+            creature(SP_FLY, PX + PS * 0.17 + sin(anim_t * 2.1) * PS * 0.03, PY + PS * 0.8 + sin(anim_t * 3.3) * PS * 0.02, PS * 0.18, sin(anim_t * 5) * 4, 0);
         }
         clip(0);
         frame(apart, "THE FLY", "SIGHT, AND NOTHING ELSE", T >= T_FLY && (T < T_BAT || T >= T_ALL));
@@ -464,7 +465,7 @@ static void draw_scene(SDL_Renderer *r, int w, int h)
         clip(1);
         if (t > 0) {
             worm_view(t, &hx, &hy, &hd);
-            creature(SP_WORM, hx, hy - PS * 0.02 + sin(anim_t * 6) * PS * 0.004, PS * 0.2, hd, 0);
+            creature(SP_WORM, hx, hy - PS * 0.02 + sin(anim_t * 6) * PS * 0.004, PS * 0.17, hd, 0);
         }
         clip(0);
         frame(apart, "THE WORM", "TOUCH, AND NOTHING ELSE", T >= T_WORM);
@@ -480,9 +481,9 @@ static void draw_scene(SDL_Renderer *r, int w, int h)
         if (T >= T_MERGE) whole(SP_EDGES, 255, 214, 120, end * whole_shown); /* its shape, drawn over it */
     }
     if (apart > 0.02 && T >= T_BAT) {
-        double bx = PX + PS * 0.82, by = PY + PS * 0.13;
+        double bx = PX + PS * 0.2, by = PY + PS * 0.2;
         bat_view(T - T_BAT, bx, by);
-        creature(SP_BAT, bx, by + PS * 0.02, PS * 0.2, sin(anim_t * 1.7) * 3, 0);
+        creature(SP_BAT, bx, by - PS * 0.02, PS * 0.2, sin(anim_t * 1.7) * 3, 0);
     }
     clip(0);
     if (apart > 0.5) frame(apart, "THE BAT", "HEARING, AND NOTHING ELSE", T >= T_BAT && (T < T_WORM || T >= T_ALL));

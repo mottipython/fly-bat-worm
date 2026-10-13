@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fly, Bat, Worm screensaver
+Comment=Start Fly, Bat, Worm when the session has been idle
+Exec=fly-bat-worm-screensaver watch
+Icon=fly-bat-worm
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

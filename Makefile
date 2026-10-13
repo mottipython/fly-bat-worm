@@ -1,5 +1,5 @@
 # Fly, Bat, Worm - a screensaver of the thought experiment from Neal Stephenson's "Anathem"
-VERSION  := 0.1.0
+VERSION  := 1.0.0
 PREFIX   ?= /usr
 SYSCONFDIR ?= /etc
 DESTDIR  ?=
